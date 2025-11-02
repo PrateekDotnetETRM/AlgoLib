@@ -75,7 +75,39 @@ namespace AlgoLib.Core.Problems.Strings
             return counts.Values.All(v => v == 0);
         }
 
+        public static bool IsAnagramEarlyExit(string s, string t)
+        {
+            s = s.Normalize(NormalizationForm.FormC);
+            t = t.Normalize(NormalizationForm.FormC);
 
+            if (s.Length != t.Length)
+                return false;
+
+            Dictionary<char, int> dict = [];
+            int deviation = 0;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                char sc = s[i];
+                char tc = t[i];
+
+                
+                int scCount = dict.GetValueOrDefault(sc);
+                if (scCount < 0) deviation--; else deviation++;
+                dict[sc] = scCount + 1;
+
+               
+                int tcCount = dict.GetValueOrDefault(tc);
+                if (tcCount > 0) deviation--; else deviation++;
+                dict[tc] = tcCount - 1;
+
+                // Early exit if deviation exceeds remaining characters
+                if (deviation > (s.Length - i - 1) * 2)
+                    return false;
+            }
+
+            return deviation == 0;
+        }
 
 
         public static bool IsAnagramLinq(string s, string t)
