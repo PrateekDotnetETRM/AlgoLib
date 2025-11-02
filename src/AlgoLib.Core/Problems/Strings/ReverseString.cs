@@ -2,6 +2,9 @@
 
 namespace AlgoLib.Core.Problems.Strings;
 
+/// <summary>
+/// Easy String Reverse
+/// </summary>
 public static class ReverseString
 {
     public static string ReverseUsingArray(string testString)
