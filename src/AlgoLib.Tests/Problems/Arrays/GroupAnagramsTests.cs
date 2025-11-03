@@ -11,7 +11,23 @@ namespace AlgoLib.Tests.Problems.Arrays
         [MemberData(nameof(TestCases))]
         public void GroupAnagramsLinq_ShouldMatchExpectedOutput(string[] input, List<List<string>> expected)
         {
-            var result = GroupAnagrams.FindGroupAnagramsWithLinq(input);
+            var result = GroupAnagrams.GroupAnagramsWithLinq(input);
+            result.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCases))]
+        public void GroupAnagramsTuple_ShouldMatchExpectedOutput(string[] input, List<List<string>> expected)
+        {
+            var result = GroupAnagrams.GroupAnagramsWithFrequencyMap(input);
+            result.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCases))]
+        public void GroupAnagramsFrequencyMap_ShouldMatchExpectedOutput(string[] input, List<List<string>> expected)
+        {
+            var result = GroupAnagrams.GroupAnagramsUsingTuple(input);
             result.Should().BeEquivalentTo(expected);
         }
 
@@ -19,7 +35,7 @@ namespace AlgoLib.Tests.Problems.Arrays
         [MemberData(nameof(TestCases))]
         public void GroupAnagrams_ShouldMatchExpectedOutput(string[] input, List<List<string>> expected)
         {
-            var result = GroupAnagrams.FindGroupAnagramsWithLinq(input);
+            var result = GroupAnagrams.GroupAnagramsWithDictionary(input);
             result.Should().BeEquivalentTo(expected);
         }
 
