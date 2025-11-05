@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace AlgoLib.Core.Problems.Arrays
 {
+    /// <summary>
+    /// Easy : O(n) 
+    /// </summary>
     public static class RemoveElement
     {
 
@@ -21,6 +24,23 @@ namespace AlgoLib.Core.Problems.Arrays
                 }
             }
             return k;
+        }
+
+        public static int RemoveElementOptimizedTwo(int[] nums, int val)
+        {
+            int i = 0, n = nums.Length;
+            while (i < n)
+            {
+                if (nums[i] == val)
+                {
+                    nums[i] = nums[--n];
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return n;
         }
 
         public static int RemoveElementBruteforce(int[] nums, int val)
