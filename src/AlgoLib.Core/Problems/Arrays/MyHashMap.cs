@@ -13,7 +13,8 @@ namespace AlgoLib.Core.Problems.Arrays
         private readonly decimal resizeFactor = 0.90m;
         private uint capacity = 4;
         private uint count = 0;
-        uint threshold = 0;
+        private uint threshold = 0;
+        private const uint MaxCapacity = 1u << 30; 
 
         public MyHashMap()
         {
@@ -21,41 +22,79 @@ namespace AlgoLib.Core.Problems.Arrays
             threshold = (uint)(capacity * resizeFactor);
             for (int i = 0; i < capacity; i++)
             {
-                this.buckets[i] = new();
+                buckets[i] = new();
             }
         }
 
         public void Put(int key, int value)
         {
-            if(count >= threshold)
+            if (count >= threshold)
             {
-                ResizeBucket();
+                Resize();
             }
 
             var hashCode = ComputeHash(key);
-
-            var index = hashCode & capacity - 1;
+            var index = hashCode & (capacity - 1);
 
             var current = buckets[index].Head;
 
-            while (current != null) { 
-                
-                if(current.Key == key)
+            while (current != null)
+            {
+                if (current.Key == key)
                 {
                     current.Value = value;
                     return;
                 }
-                current = current.Next;            
+                current = current.Next;
             }
 
             Node newNode = new(key, value, buckets[index].Head);
-            buckets[index].Head= newNode;
+            buckets[index].Head = newNode;
             count++;
         }
 
-        private void ResizeBucket()
+        public bool TryGetValue(int key, out int value)
         {
-            var newCapacity = capacity << 1;
+            var hashCode = ComputeHash(key);
+            var index = hashCode & (capacity - 1);
+
+            Node current = buckets[index].Head;
+            while (current != null)
+            {
+                if (current.Key == key)
+                {
+                    value = current.Value;
+                    return true;
+                }
+                current = current.Next;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public IEnumerable<KeyValuePair<int, int>> GetAll()
+        {
+            foreach (var bucket in buckets)
+            {
+                var current = bucket.Head;
+                while (current != null)
+                {
+                    yield return new KeyValuePair<int, int>(current.Key, current.Value);
+                    current = current.Next;
+                }
+            }
+        }
+
+        private void Resize()
+        {
+            // Overflow protection
+            if (capacity > uint.MaxValue >> 1 || capacity >= MaxCapacity)
+            {
+                throw new InvalidOperationException("Cannot resize: capacity overflow or exceeds maximum allowed.");
+            }
+
+            uint newCapacity = capacity << 1;
 
             Bucket[] newBuckets = new Bucket[newCapacity];
             for (int i = 0; i < newCapacity; i++)
@@ -71,11 +110,9 @@ namespace AlgoLib.Core.Problems.Arrays
                     var key = current.Key;
                     var value = current.Value;
                     var hashcode = ComputeHash(key);
-
                     var index = hashcode & (newCapacity - 1);
 
                     Node newNode = new(key, value, newBuckets[index].Head);
-                   
                     newBuckets[index].Head = newNode;
                     current = current.Next;
                 }
@@ -89,8 +126,7 @@ namespace AlgoLib.Core.Problems.Arrays
         public int Get(int key)
         {
             var hashCode = ComputeHash(key);
-
-            var index = hashCode & capacity - 1;
+            var index = hashCode & (capacity - 1);
 
             Node currentBucket = buckets[index].Head;
 
@@ -98,18 +134,17 @@ namespace AlgoLib.Core.Problems.Arrays
             {
                 if (currentBucket.Key == key)
                 {
-                    return currentBucket.Value; 
+                    return currentBucket.Value;
                 }
                 currentBucket = currentBucket.Next;
             }
-            throw new ArgumentException($"This key {key} is not in HashMap");
+            return -1;
         }
 
         public void Remove(int key)
         {
             var hashCode = ComputeHash(key);
-
-            var index = hashCode & capacity - 1;
+            var index = hashCode & (capacity - 1);
 
             Node current = buckets[index].Head;
             Node previous = null;
@@ -128,7 +163,6 @@ namespace AlgoLib.Core.Problems.Arrays
                 previous = current;
                 current = current.Next;
             }
-            throw new ArgumentException($"This key {key} is not in HashMap");
         }
 
         public uint ComputeHash(int key)
@@ -147,25 +181,24 @@ namespace AlgoLib.Core.Problems.Arrays
 
                 return hash;
             }
-
         }
     }
 
-
-    public class Bucket
+    public sealed class Bucket
     {
-       public Node Head;
+        public Node Head;
     }
 
-    public record Node
+    public sealed class Node
     {
         public int Key;
         public int Value;
         public Node Next;
-        public Node(int key, int value,Node next = null) {         
+        public Node(int key, int value, Node next = null)
+        {
             Key = key;
             Value = value;
-            Next = next;        
+            Next = next;
         }
     }
 }
