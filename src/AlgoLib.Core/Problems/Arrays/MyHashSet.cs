@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AlgoLib.Core.Problems.Arrays
 {
 
-    public class MyHashSet<T>
+    public sealed class MyHashSet<T>
     {
         readonly decimal resizeFactor = 0.75m;
         readonly IEqualityComparer<T> comparer;
@@ -25,7 +25,7 @@ namespace AlgoLib.Core.Problems.Arrays
         {
             this.comparer = comparer ?? EqualityComparer<T>.Default;
 
-            this.threshold = (int)(capacity * resizeFactor);
+            this.threshold = Math.Max(1, (int)(capacity * resizeFactor));
             this.buckets = new Bucket<T>[capacity];
          
             for (int i = 0; i < capacity; i++)
@@ -47,7 +47,7 @@ namespace AlgoLib.Core.Problems.Arrays
 
             var index = hashcode & (capacity - 1);
 
-            Node<T> current = this.buckets[index].Head;
+            Node<T>? current = this.buckets[index].Head;
 
             while (current != null)
             {
@@ -59,9 +59,10 @@ namespace AlgoLib.Core.Problems.Arrays
             }
 
 
-            current = new Node<T>(key);
-
-            current.next = this.buckets[index].Head;
+            current = new Node<T>(key)
+            {
+                next = this.buckets[index].Head
+            };
             this.buckets[index].Head = current;
 
             counter++;
@@ -78,7 +79,7 @@ namespace AlgoLib.Core.Problems.Arrays
 
             foreach (Bucket<T> bucket in buckets)
             {
-                Node<T> current = bucket.Head;
+                Node<T>? current = bucket.Head;
                 while (current != null)
                 {
                     var key = current.value;
@@ -87,7 +88,7 @@ namespace AlgoLib.Core.Problems.Arrays
                     var index = hashcode & (newCapacity - 1);
 
 
-                    Node<T> newBn = newBuckets[index].Head;
+                    Node<T>? newBn = newBuckets[index].Head;
 
                     Node<T> newNode = new(key);
                     newNode.next = newBuckets[index].Head;
@@ -99,7 +100,20 @@ namespace AlgoLib.Core.Problems.Arrays
 
             this.buckets = newBuckets;
             this.capacity = newCapacity;
-            this.threshold = (int)(this.capacity * this.resizeFactor);
+            this.threshold = Math.Max(1, (int)(this.capacity * this.resizeFactor));
+        }
+
+        public IEnumerable<T> Items()
+        {
+            foreach (var bucket in buckets)
+            {
+                var current = bucket.Head;
+                while (current != null)
+                {
+                    yield return current.value;
+                    current = current.next;
+                }
+            }
         }
 
         public void Remove(T key)
@@ -109,8 +123,8 @@ namespace AlgoLib.Core.Problems.Arrays
 
             var index = hashcode & (capacity - 1);
 
-            Node<T> current = this.buckets[index].Head;
-            Node<T> previous = null;
+            Node<T>? current = this.buckets[index].Head;
+            Node<T>? previous = null;
 
             while (current != null)
             {
@@ -137,7 +151,7 @@ namespace AlgoLib.Core.Problems.Arrays
 
             var index = hashcode & (capacity - 1);
 
-            Node<T> current = this.buckets[index].Head;
+            Node<T>? current = this.buckets[index].Head;
 
 
             while (current != null)
@@ -190,18 +204,10 @@ namespace AlgoLib.Core.Problems.Arrays
         public Node<T>? Head;
     }
 
-    public class Node<T>
+    public sealed class Node<T>(T value, Node<T>? next = null)
     {
-        public T value;
-        public Node<T>? next;
-
-        public Node(T value , Node<T>? next = null)
-        {
-
-            this.value = value;
-            this.next = next;
-        }
-
+        public T value = value;
+        public Node<T>? next = next;
     }
 
 

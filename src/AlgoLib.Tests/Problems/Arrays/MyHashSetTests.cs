@@ -203,10 +203,8 @@ namespace AlgoLib.Tests.Problems.Arrays
 
     public class PersonComparer : IEqualityComparer<Person>
     {
-        public bool Equals(Person x, Person y) =>
-            x.FirstName == y.FirstName && x.LastName == y.LastName;
+        public bool Equals(Person x, Person y) => x.FirstName == y.FirstName && x.LastName == y.LastName;
 
-        public int GetHashCode(Person obj) =>
-            HashCode.Combine(obj.FirstName, obj.LastName);
+        public int GetHashCode(Person obj) => HashCode.Combine(obj.FirstName, obj.LastName);
     }
 }
