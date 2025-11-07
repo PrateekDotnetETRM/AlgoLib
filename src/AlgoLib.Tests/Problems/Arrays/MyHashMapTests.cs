@@ -1,109 +1,130 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
 using Xunit;
+using FluentAssertions;
+using AlgoLib.Core.Problems.Arrays;
 
 namespace AlgoLib.Tests.Problems.Arrays
 {
-    using AlgoLib.Core.Problems.Arrays;
-    using FluentAssertions;
-    using System;
-    using Xunit;
-
     public class MyHashMapTests
     {
         [Fact]
-        public void PutAndGet_ShouldStoreAndRetrieveValue()
+        public void Put_ShouldInsertAndRetrieveValue()
         {
-            var map = new MyHashMap();
-            map.Put(1, 100);
+            var map = new MyHashMap<string, int>();
+            map.Put("apple", 10);
 
-            map.Get(1).Should().Be(100);
+            map.TryGetValue("apple", out var value).Should().BeTrue();
+            value.Should().Be(10);
         }
 
         [Fact]
-        public void Get_ShouldReturnMinusOneForMissingKey()
+        public void Put_ShouldUpdateExistingKey()
         {
-            var map = new MyHashMap();
-            map.Get(999).Should().Be(-1);
-        }
+            var map = new MyHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Put("apple", 20);
 
-        [Fact]
-        public void Put_ShouldOverwriteExistingValue()
-        {
-            var map = new MyHashMap();
-            map.Put(1, 100);
-            map.Put(1, 200);
-
-            map.Get(1).Should().Be(200);
+            map.GetAll().Count().Should().Be(1);
+            map.TryGetValue("apple", out var value).Should().BeTrue();
+            value.Should().Be(20);
         }
 
         [Fact]
         public void Remove_ShouldDeleteKey()
         {
-            var map = new MyHashMap();
-            map.Put(1, 100);
-            map.Remove(1);
+            var map = new MyHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Remove("apple");
 
-            map.Get(1).Should().Be(-1);
+            map.TryGetValue("apple", out var value).Should().BeFalse();
         }
 
         [Fact]
-        public void Remove_ShouldNotThrowForMissingKey()
+        public void Get_ShouldThrowForMissingKey()
         {
-            var map = new MyHashMap();
-            Action act = () => map.Remove(999);
-
-            act.Should().NotThrow();
+            var map = new MyHashMap<string, int>();
+            Action act = () => map.Get("missing");
+            act.Should().Throw<ArgumentException>().WithMessage("*doesn't exists*");
         }
 
         [Fact]
-        public void Put_ShouldHandleCollisions()
+        public void Linq_ShouldFilterValues()
         {
-            var map = new MyHashMap();
+            var map = new MyHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Put("banana", 20);
+            map.Put("cherry", 30);
 
-            // These keys should collide if hash function is simple
-            int key1 = 1;
-            int key2 = key1 + (int)Math.Pow(2, 4); // Try to force collision
-
-            map.Put(key1, 100);
-            map.Put(key2, 200);
-
-            map.Get(key1).Should().Be(100);
-            map.Get(key2).Should().Be(200);
+            var result = map.GetAll().Where(kvp => kvp.Value > 15).Select(kvp => kvp.Key).ToList();
+            result.Should().Contain(new[] { "banana", "cherry" });
         }
 
         [Fact]
-        public void Resize_ShouldDoubleCapacityAndPreserveData()
+        public void Put_ShouldInsertAndRetrieveValue_Fast()
         {
-            var map = new MyHashMap();
+            var map = new FastHashMap<string, int>();
+            map.Put("apple", 10);
 
-            // Insert enough items to trigger resize
-            for (int i = 0; i < 10; i++)
-            {
-                map.Put(i, i * 10);
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                map.Get(i).Should().Be(i * 10);
-            }
+            map.TryGetValue("apple", out var value).Should().BeTrue();
+            value.Should().Be(10);
         }
 
         [Fact]
-        public void Resize_ShouldThrowOnOverflow()
+        public void Put_ShouldUpdateExistingKey_Fast()
         {
-            var map = new MyHashMap();
+            var map = new FastHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Put("apple", 20);
 
-            // Manually set capacity near max
-            var capacityField = typeof(MyHashMap).GetField("capacity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            capacityField.SetValue(map, uint.MaxValue >> 1);
+            map.Count().Should().Be(1);
+            map.TryGetValue("apple", out var value).Should().BeTrue();
+            value.Should().Be(20);
+        }
 
-            var countField = typeof(MyHashMap).GetField("count", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            countField.SetValue(map, uint.MaxValue >> 1);
+        [Fact]
+        public void ContainsKey_ShouldReturnTrueForExistingKey()
+        {
+            var map = new FastHashMap<string, int>();
+            map.Put("banana", 5);
 
-            Action act = () => map.Put(999, 999);
+            map.ContainsKey("banana").Should().BeTrue();
+            map.ContainsKey("orange").Should().BeFalse();
+        }
 
-            act.Should().Throw<InvalidOperationException>()
-               .WithMessage("Cannot resize: capacity overflow or exceeds maximum allowed.");
+        [Fact]
+        public void Remove_ShouldDeleteKey_Fast()
+        {
+            var map = new FastHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Remove("apple");
+
+            map.ContainsKey("apple").Should().BeFalse();
+        }
+
+        [Fact]
+        public void Clear_ShouldRemoveAllItems()
+        {
+            var map = new FastHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Put("banana", 20);
+
+            map.Clear();
+            map.Count().Should().Be(0);
+        }
+
+        [Fact]
+        public void Linq_ShouldFilterValues_Fast()
+        {
+            var map = new FastHashMap<string, int>();
+            map.Put("apple", 10);
+            map.Put("banana", 20);
+            map.Put("cherry", 30);
+
+            var result = map.Where(kvp => kvp.Value > 15).Select(kvp => kvp.Key).ToList();
+            result.Should().Contain(new[] { "banana", "cherry" });
         }
     }
+
 }
+
+
