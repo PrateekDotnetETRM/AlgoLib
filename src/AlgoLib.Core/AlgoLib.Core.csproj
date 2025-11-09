@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Problems\Linked Lists\" />
+    <Folder Include="Problems\Graphs\" />
+    <Folder Include="Problems\Dynamic Programming\" />
+    <Folder Include="Problems\Searching\" />
+    <Folder Include="Problems\Sorting\" />
+    <Folder Include="Problems\Trees\" />
+    <Folder Include="Problems\Queues\" />
+    <Folder Include="Problems\Stacks\" />
+  </ItemGroup>
+
 </Project>

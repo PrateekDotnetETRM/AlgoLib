@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Problems\Dynamic Programming\" />
+    <Folder Include="Problems\Graphs\" />
+    <Folder Include="Problems\Linked Lists\" />
+    <Folder Include="Problems\Trees\" />
+    <Folder Include="Problems\Stacks\" />
+    <Folder Include="Problems\Sorting\" />
+    <Folder Include="Problems\Searching\" />
+    <Folder Include="Problems\Queues\" />
+    <Folder Include="Problems\Strings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\AlgoLib.Core\AlgoLib.Core.csproj" />
+  </ItemGroup>
+
+</Project>

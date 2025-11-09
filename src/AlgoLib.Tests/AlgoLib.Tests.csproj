@@ -23,4 +23,15 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Problems\Dynamic Programming\" />
+    <Folder Include="Problems\Graphs\" />
+    <Folder Include="Problems\Linked Lists\" />
+    <Folder Include="Problems\Trees\" />
+    <Folder Include="Problems\Stacks\" />
+    <Folder Include="Problems\Sorting\" />
+    <Folder Include="Problems\Searching\" />
+    <Folder Include="Problems\Queues\" />
+  </ItemGroup>
+
 </Project>
