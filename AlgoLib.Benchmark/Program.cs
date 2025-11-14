@@ -2,9 +2,11 @@
 using AlgoLib.Benchmark.Problems.Arrays;
 using BenchmarkDotNet.Running;
 
-Console.WriteLine("Ruuning Benchmark . . .");
+Console.WriteLine("Ruuning Benchmark");
 
 
 
 
-BenchmarkRunner.Run<SortArrayBenchmarks>();
+//BenchmarkRunner.Run<SortArrayBenchmarks>();
+//BenchmarkRunner.Run<TopKFrequentBenchmark>();
+BenchmarkRunner.Run<SumMatrixBenchmark>();

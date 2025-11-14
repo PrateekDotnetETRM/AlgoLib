@@ -14,6 +14,11 @@ namespace AlgoLib.Core.Problems.Arrays
         /// Time complexity: O(n log⁡ n) in all cases
         /// Space complexity: O(1) (in-place)
         /// Not stable: Equal elements may not retain their original order
+        /// 
+        /// Heap sort has good theoretical guarantees: O(n log n) time complexity in all cases.
+        /// However, in practice, it's rarely used as the default sorting algorithm in standard libraries (e.g., C++ STL, Java, Python) 
+        /// because of performance and cache inefficiency.Heap sort relies on a binary heap structure, which involves frequent jumps in memory (especially in array-based implementations).
+        /// This leads to cache misses, making it slower than algorithms like Quick Sort that access memory more sequentially.
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
