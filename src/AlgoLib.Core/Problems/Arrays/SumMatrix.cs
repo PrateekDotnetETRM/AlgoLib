@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AlgoLib.Core.Problems.Arrays
 {
+    /// <summary>
+    /// You are given a 2D matrix matrix, handle multiple queries of the following type
+    /// Calculate the sum of the elements of matrix inside the rectangle defined by its upper left corner(row1, col1) and lower right corner(row2, col2).
+    /// </summary>
     public class SumMatrix
     {
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using System.Threading.Tasks;
 namespace AlgoLib.Core.Problems.Arrays
 {
     /// <summary>
+    /// Given two strings s and t, return true if the two strings are anagrams of each other, otherwise return false.
+    /// An anagram is a string that contains the exact same characters as another string, but the order of the characters can be different
     /// Medium : Dictionary solution might be better , linq has overhead .
     ///  Tuple will work well as well :D
     /// </summary>

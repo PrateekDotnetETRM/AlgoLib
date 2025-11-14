@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace AlgoLib.Core.Problems.Arrays
 {
+    /// <summary>
+    /// HashMap Implementation 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="U"></typeparam>
     public class MyHashMap<T, U>
     {
         Bucket<T, U>[] buckets;

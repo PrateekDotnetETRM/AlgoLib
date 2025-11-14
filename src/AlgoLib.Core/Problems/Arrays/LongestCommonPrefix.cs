@@ -8,6 +8,8 @@ namespace AlgoLib.Core.Problems.Arrays
 {
     /// <summary>
     /// Easy
+    /// You are given an array of strings strs. Return the longest common prefix of all the strings.
+    /// If there is no longest common prefix, return an empty string
     /// String Builder does work the best in most senarios 
     /// </summary>
     public static class LongestCommonPrefix

@@ -12,6 +12,7 @@ namespace AlgoLib.Core.Problems.Arrays
         /// <summary>
         /// Dutch National Flag problem (The task is to sort the array in-place such that elements of the same color are grouped together 
         /// and arranged in the order: red (0), white (1), and then blue (2))
+        /// Better approch is just to use temp for swap,i have used less efficient method
         /// </summary>
         /// <param name="nums"></param>
         public static void SortDutchFlagColors(int[] nums)

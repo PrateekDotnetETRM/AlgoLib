@@ -20,7 +20,6 @@
     <Folder Include="Problems\Sorting\" />
     <Folder Include="Problems\Searching\" />
     <Folder Include="Problems\Queues\" />
-    <Folder Include="Problems\Strings\" />
   </ItemGroup>
 
   <ItemGroup>

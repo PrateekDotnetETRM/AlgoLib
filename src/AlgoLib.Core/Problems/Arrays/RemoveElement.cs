@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AlgoLib.Core.Problems.Arrays
 {
     /// <summary>
+    /// You are given an integer array nums and an integer val. The task is to remove all occurrences of val from nums in-place.
+    /// After removing all occurrences of val, return the number of remaining elements, say k, such that the first k elements of nums do not contain val.
     /// Easy : O(n) 
     /// </summary>
     public static class RemoveElement

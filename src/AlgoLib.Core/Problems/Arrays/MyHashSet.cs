@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace AlgoLib.Core.Problems.Arrays
 {
-
+    /// <summary>
+    /// HashSet Implementaion
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class MyHashSet<T>
     {
         readonly decimal resizeFactor = 0.75m;
